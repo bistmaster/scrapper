@@ -1,9 +1,11 @@
 package org.mit.impl;
 
+import org.json.simple.JSONArray;
 import org.mit.bean.CourseDetail;
 import org.mit.bean.CourseList;
-import org.mit.service.MITRequester;
 import org.mit.service.MITService;
+import org.mit.util.JSONParserUtil;
+import org.mit.util.MITRequester;
 /**
  * 
  * @author Bethoveen
@@ -11,12 +13,15 @@ import org.mit.service.MITService;
  */
 public class MITServiceImpl extends MITRequester implements MITService{
 	
+	
+	
 	public MITServiceImpl(int _provider) {
 		this.setProvider(_provider);
 	}
 
 	public CourseDetail getCourseDetail(String linkHash) {
-		// TODO Auto-generated method stub
+		String details = sendRequest("courses/view/" + linkHash + "/");
+		System.out.println(details);
 		return null;
 	}
 
@@ -26,8 +31,10 @@ public class MITServiceImpl extends MITRequester implements MITService{
 	}
 
 	public CourseList getCourseList() {
-		// TODO Auto-generated method stub
-		System.out.println(sendRequest("providers/" + this.getProvider() + "/courses/"));
+		String response = sendRequest("providers/" + this.getProvider() + "/courses/");
+		JSONParserUtil parser = new JSONParserUtil();
+		JSONArray results = (JSONArray) parser.getValue(response, "results");
+		parser.getArrayValue(results);
 		return null;
 	}
 	
@@ -35,6 +42,7 @@ public class MITServiceImpl extends MITRequester implements MITService{
 		MITServiceImpl service = new MITServiceImpl(13);
 		System.out.println("Fetching... ");
 		service.getCourseList();
+		//service.getCourseDetail("59069fd6f629c3eefa5f8c5d6a39d96a");
 	}
 
 }
