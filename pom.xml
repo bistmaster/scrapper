@@ -21,5 +21,10 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+        <groupId>net.sourceforge.argo</groupId>
+        <artifactId>argo</artifactId>
+        <version>3.12</version>
+    </dependency>
   </dependencies>
 </project>
