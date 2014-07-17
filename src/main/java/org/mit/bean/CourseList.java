@@ -1,6 +1,5 @@
 package org.mit.bean;
 
-import java.util.ArrayList;
 /**	
  * 
  * @author Bethoveen
@@ -12,11 +11,8 @@ public class CourseList {
 	private String language = "";
 	private int id = 0;
 	private String author = "";
-	private ArrayList<CourseDetail> categories = new ArrayList<CourseDetail>();
 	
-	public CourseList() {
-		
-	}
+	public CourseList() {}
 	
 	public String getTitle() {
 		return title;
@@ -56,14 +52,6 @@ public class CourseList {
 	
 	public void setAuthor(String author) {
 		this.author = author;
-	}
-	
-	public ArrayList<CourseDetail> getCategories() {
-		return categories;
-	}
-	
-	public void setCategories(ArrayList<CourseDetail> categories) {
-		this.categories = categories;
 	}
 
 }

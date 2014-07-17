@@ -1,5 +1,7 @@
 package org.mit.impl;
 
+import java.util.List;
+
 import org.json.simple.JSONArray;
 import org.mit.bean.CourseDetail;
 import org.mit.bean.CourseList;
@@ -30,12 +32,11 @@ public class MITServiceImpl extends MITRequester implements MITService{
 		
 	}
 
-	public CourseList getCourseList() {
+	public List<CourseList> getCourseList() {
 		String response = sendRequest("providers/" + this.getProvider() + "/courses/");
 		JSONParserUtil parser = new JSONParserUtil();
 		JSONArray results = (JSONArray) parser.getValue(response, "results");
-		parser.getArrayValue(results);
-		return null;
+		return parser.getArrayValues(results);
 	}
 	
 	public static void main(String[] args) {
