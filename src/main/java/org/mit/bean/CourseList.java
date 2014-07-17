@@ -9,7 +9,7 @@ public class CourseList {
 	private String title = "";
 	private String hash = "";
 	private String language = "";
-	private int id = 0;
+	private long id = 0;
 	private String author = "";
 	
 	public CourseList() {}
@@ -38,11 +38,11 @@ public class CourseList {
 		this.language = language;
 	}
 	
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 	
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	

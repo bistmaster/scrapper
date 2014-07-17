@@ -26,7 +26,7 @@ public class JSONParserUtil {
 			CourseList cl = new CourseList();
 			cl.setAuthor((String) json.get("author"));
 			cl.setHash((String) json.get("linkhash"));
-			cl.setId(Integer.parseInt((String) json.get("id")));
+			cl.setId((Long) json.get("id"));
 			cl.setLanguage((String) json.get("language"));
 			cl.setTitle((String) json.get("title"));
 			listCourse.add(cl);
@@ -37,9 +37,9 @@ public class JSONParserUtil {
 	public Object getValue(String jsonText, String key){
 		JSONParser jsonParser = new JSONParser();
 		Object value = null;
-             try {
-		JSONObject jsonObject = (JSONObject) jsonParser.parse(jsonText);
-		value =  jsonObject.get(key);
+		try {
+			JSONObject jsonObject = (JSONObject) jsonParser.parse(jsonText);
+			value =  jsonObject.get(key);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}

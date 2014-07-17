@@ -1,7 +1,6 @@
 package org.mit.bean;
 
 import java.util.ArrayList;
-import java.util.Date;
 /**
  * 
  * @author Bethoveen
@@ -12,11 +11,11 @@ public class CourseDetail {
 	private String title = "";
 	private String description = "";
 	private String tags = "";
-	private int provider = 0;
+	private long provider = 0;
 	private String providerName = "";
 	private String language = "";
-	private Date datePublished = null;
-	private int id = 0;
+	private String datePublished = null;
+	private long id = 0;
 	private String linkUrl = "";
 	private String author = "";
 	private ArrayList<String> categories = new ArrayList<String>();
@@ -55,11 +54,11 @@ public class CourseDetail {
 		this.tags = tags;
 	}
 
-	public int getProvider() {
+	public long getProvider() {
 		return provider;
 	}
 
-	public void setProvider(int provider) {
+	public void setProvider(long provider) {
 		this.provider = provider;
 	}
 
@@ -79,19 +78,19 @@ public class CourseDetail {
 		this.language = language;
 	}
 
-	public Date getDatePublished() {
+	public String getDatePublished() {
 		return datePublished;
 	}
 
-	public void setDatePublished(Date datePublished) {
+	public void setDatePublished(String datePublished) {
 		this.datePublished = datePublished;
 	}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
