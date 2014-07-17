@@ -8,8 +8,7 @@ import org.mit.bean.CourseList;
  *
  */
 public interface MITService {
-	public abstract CourseList getCourseList(int provider);
+	public abstract CourseList getCourseList();
 	public abstract CourseDetail getCourseDetail(String linkHash);
 	public abstract void getCourseContent(String link); 
-	
 }
