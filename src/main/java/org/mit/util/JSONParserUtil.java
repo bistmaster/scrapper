@@ -37,9 +37,9 @@ public class JSONParserUtil {
 	public Object getValue(String jsonText, String key){
 		JSONParser jsonParser = new JSONParser();
 		Object value = null;
-        try {
-			JSONObject jsonObject = (JSONObject) jsonParser.parse(jsonText);
-			value =  jsonObject.get(key);
+             try {
+		JSONObject jsonObject = (JSONObject) jsonParser.parse(jsonText);
+		value =  jsonObject.get(key);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}

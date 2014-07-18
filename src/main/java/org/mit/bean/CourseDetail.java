@@ -12,7 +12,7 @@ public class CourseDetail {
 	private String title = "";
 	private String description = "";
 	private String tags = "";
-	private int provide = 0;
+	private int provider = 0;
 	private String providerName = "";
 	private String language = "";
 	private Date datePublished = null;
@@ -55,12 +55,12 @@ public class CourseDetail {
 		this.tags = tags;
 	}
 
-	public int getProvide() {
-		return provide;
+	public int getProvider() {
+		return provider;
 	}
 
-	public void setProvide(int provide) {
-		this.provide = provide;
+	public void setProvider(int provider) {
+		this.provider = provider;
 	}
 
 	public String getProviderName() {

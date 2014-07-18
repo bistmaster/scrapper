@@ -1,5 +1,6 @@
 package org.mit.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.json.simple.JSONArray;
@@ -15,7 +16,7 @@ import org.mit.util.MITRequester;
  */
 public class MITServiceImpl extends MITRequester implements MITService{
 	
-	
+	private final JSONParserUtil parser = new JSONParserUtil();
 	
 	public MITServiceImpl(int _provider) {
 		this.setProvider(_provider);
@@ -23,8 +24,19 @@ public class MITServiceImpl extends MITRequester implements MITService{
 
 	public CourseDetail getCourseDetail(String linkHash) {
 		String details = sendRequest("courses/view/" + linkHash + "/");
-		System.out.println(details);
-		return null;
+                CourseDetail cDetails = new CourseDetail();
+                cDetails.setAuthor((String) parser.getValue(details, "author"));
+                cDetails.setLinkHash((String) parser.getValue(details, "linkhash"));
+                cDetails.setDatePublished((Date) parser.getValue(details, "date_published"));
+                cDetails.setDescription((String) parser.getValue(details, "description"));
+                cDetails.setId(Integer.parseInt((String) parser.getValue(details, "id")));
+                cDetails.setLanguage((String)parser.getValue(details, "language"));
+                cDetails.setLinkUrl((String)parser.getValue(details, "linkurl"));
+                cDetails.setProvider(Integer.parseInt((String)parser.getValue(details, "provider")));
+                cDetails.setProviderName((String)parser.getValue(details, "provider_name"));
+                cDetails.setTags((String)parser.getValue(details, "tags"));
+                cDetails.setTitle((String)parser.getValue(details, "title"));
+		return cDetails;
 	}
 
 	public void getCourseContent(String link) {
@@ -34,7 +46,6 @@ public class MITServiceImpl extends MITRequester implements MITService{
 
 	public List<CourseList> getCourseList() {
 		String response = sendRequest("providers/" + this.getProvider() + "/courses/");
-		JSONParserUtil parser = new JSONParserUtil();
 		JSONArray results = (JSONArray) parser.getValue(response, "results");
 		return parser.getArrayValues(results);
 	}
@@ -43,7 +54,7 @@ public class MITServiceImpl extends MITRequester implements MITService{
 		MITServiceImpl service = new MITServiceImpl(13);
 		System.out.println("Fetching... ");
 		service.getCourseList();
-		//service.getCourseDetail("59069fd6f629c3eefa5f8c5d6a39d96a");
+		service.getCourseDetail("59069fd6f629c3eefa5f8c5d6a39d96a");
 	}
 
 }
