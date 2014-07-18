@@ -9,12 +9,20 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.mit.bean.CourseList;
-
+/**
+ * This is a utility class that parse the JSON object
+ * @author Bethoveen
+ *
+ */
 
 public class JSONParserUtil {
-
+	/**
+	 * 
+	 * @param arrays A JSONArray of JSON objects
+	 * @return List<CourseList>
+	 */
 	@SuppressWarnings("rawtypes")
-	public List<CourseList> getArrayValues(JSONArray arrays){
+	public List<CourseList> getCoursesOnJson(JSONArray arrays){
 		List<CourseList> listCourse = new ArrayList<CourseList>();
 		if(arrays == null || arrays.size() == 0){
 			throw new RuntimeException("Invalid JSONArray");
@@ -32,8 +40,14 @@ public class JSONParserUtil {
 			listCourse.add(cl);
 		}		
 		return listCourse;
-	}	  
+	}	
 	
+	/**
+	 * 
+	 * @param jsonText A Json-format String
+	 * @param key	   Get the value of the JSON Attribute provided by a key 
+	 * @return Object
+	 */
 	public Object getValue(String jsonText, String key){
 		JSONParser jsonParser = new JSONParser();
 		Object value = null;
