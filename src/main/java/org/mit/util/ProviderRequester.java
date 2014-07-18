@@ -39,7 +39,7 @@ public class ProviderRequester {
 	 */
 	public String sendRequest(String page, boolean isAPI) {
 		String output = "";	
-		URL url = null;
+		String pageUrl = "";
 		/**
 		 * Throw RuntimeException if Provider Id was not set
 		 */
@@ -52,17 +52,17 @@ public class ProviderRequester {
 		 */
 		try {
 			if (isAPI == Boolean.TRUE) {
-				url = new URL(API_URL + page);
+				pageUrl = API_URL + page;
 			} else {
-				url = new URL(page);
+				pageUrl = page;
 			}
-
+			URL url = new URL(pageUrl);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json");
 			
 			if(conn.getResponseCode() != 200){
-				throw new RuntimeException("Failed, HTTP error code");
+				throw new RuntimeException("Unable to connect to the URL: " + pageUrl);
 			}
 			
 			InputStreamReader inputStream = new InputStreamReader(conn.getInputStream());

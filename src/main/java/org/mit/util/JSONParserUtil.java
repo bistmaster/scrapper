@@ -25,7 +25,7 @@ public class JSONParserUtil {
 	public List<CourseList> getCoursesOnJson(JSONArray arrays){
 		List<CourseList> listCourse = new ArrayList<CourseList>();
 		if(arrays == null || arrays.size() == 0){
-			throw new RuntimeException("Invalid JSONArray");
+			throw new RuntimeException("Provider not found, please supply a correct provider ID");
 		}
 		
 		Iterator i = arrays.iterator();
