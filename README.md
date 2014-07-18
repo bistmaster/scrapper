@@ -1,4 +1,4 @@
-OpenCourseWare Scraper
+OpenCourseWare Java Library
 ========
 
 Description
