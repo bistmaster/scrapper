@@ -17,7 +17,7 @@ servvice.getCourseContent("linkUrl") // WIP - gets the contents from the MIT or 
 ```
 
 <h5>ProviderRequester Class</h5>
-> it's a utility class that communicates to the API.
+> it's a utility class that communicates to the API. This class is utilized by ProviderServiceImpl.
 
 ```java
 ProviderRequester provider = new ProviderRequester();
