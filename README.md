@@ -38,3 +38,5 @@ parser.getCoursesOnJson(JSONArray); // return a json-parsed object of List<Cours
 
 - json-simple
 - junit
+- 
+please email me at bethoveen.todino@gmail.com
