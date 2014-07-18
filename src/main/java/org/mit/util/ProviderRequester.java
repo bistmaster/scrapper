@@ -37,8 +37,9 @@ public class ProviderRequester {
 	 * @param page Represent as the query string or complete url of the API
 	 * @return String
 	 */
-	public String sendRequest(String page) {
+	public String sendRequest(String page, boolean isAPI) {
 		String output = "";	
+		URL url = null;
 		/**
 		 * Throw RuntimeException if Provider Id was not set
 		 */
@@ -50,7 +51,12 @@ public class ProviderRequester {
 		 * Act as the communicator to the API end-pont
 		 */
 		try {
-			URL url = new URL(API_URL + page);
+			if (isAPI == Boolean.TRUE) {
+				url = new URL(API_URL + page);
+			} else {
+				url = new URL(page);
+			}
+
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json");
@@ -63,7 +69,7 @@ public class ProviderRequester {
 			BufferedReader br = new BufferedReader(inputStream);
 			String readline = "";
 			while((readline = br.readLine()) != null) {
-					output = readline;
+					output += readline;
 			}
 		} catch(MalformedURLException e){
 			System.out.println(e.getMessage());

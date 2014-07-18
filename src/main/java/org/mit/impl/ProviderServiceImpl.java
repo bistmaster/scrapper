@@ -32,7 +32,7 @@ public class ProviderServiceImpl extends ProviderRequester implements ProviderSe
 	 * @return CourseDetail bean class 
 	 */
 	public CourseDetail getCourseDetail(String linkHash) {
-		String details = sendRequest("courses/view/" + linkHash + "/");
+		String details = sendRequest("courses/view/" + linkHash + "/", true);
 		Date date = null;
 		try {
 			date = new SimpleDateFormat("yyyy-MM-dd").parse((String) parser.getValue(details, "date_published"));
@@ -57,11 +57,14 @@ public class ProviderServiceImpl extends ProviderRequester implements ProviderSe
 	}
 	
 	/**
-	 * 
+	 * Work-in-progress
+	 * Get the Course Details from the Institution
 	 */
+	@SuppressWarnings("unused")
 	public void getCourseContent(String link) {
-		// TODO Auto-generated method stub
-		
+		String[] sections = { "Syllabus", "calendar", "readings", "assignments", "download-course-materials", "videos-class-notes", };
+		String html = sendRequest(link, false);
+		System.out.println(html);
 	}
 	
 	/**
@@ -69,7 +72,8 @@ public class ProviderServiceImpl extends ProviderRequester implements ProviderSe
 	 *  @return List
 	 */
 	public List<CourseList> getCourseList() {
-		String response = sendRequest("providers/" + this.getProvider() + "/courses/");
+		String response = sendRequest("providers/" + this.getProvider() + "/courses/", true);
+		System.out.println(response);
 		JSONArray results = (JSONArray) parser.getValue(response, "results");
 		return parser.getCoursesOnJson(results);
 	}
@@ -79,6 +83,7 @@ public class ProviderServiceImpl extends ProviderRequester implements ProviderSe
 		System.out.println("Fetching... ");
 		service.getCourseList();
 		service.getCourseDetail("59069fd6f629c3eefa5f8c5d6a39d96a");
+		service.getCourseContent("http://ocw.mit.edu/courses/nuclear-engineering/22-033-nuclear-systems-design-project-fall-2011");
 	}
 
 }
