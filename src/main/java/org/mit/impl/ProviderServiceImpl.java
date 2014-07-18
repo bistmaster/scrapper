@@ -79,8 +79,8 @@ public class ProviderServiceImpl extends ProviderRequester implements ProviderSe
 	}
 	
 	public static void main(String[] args) {
-		ProviderServiceImpl service = new ProviderServiceImpl(13);
 		System.out.println("Fetching... ");
+		ProviderServiceImpl service = new ProviderServiceImpl(13);
 		service.getCourseList();
 		service.getCourseDetail("59069fd6f629c3eefa5f8c5d6a39d96a");
 		service.getCourseContent("http://ocw.mit.edu/courses/nuclear-engineering/22-033-nuclear-systems-design-project-fall-2011");
