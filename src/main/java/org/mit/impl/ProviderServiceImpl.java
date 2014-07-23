@@ -104,7 +104,7 @@ public class ProviderServiceImpl extends ProviderRequester implements ProviderSe
 	}
 	
 	/**
-	 * 
+	 * Gets the total count of courses
 	 * @return long a number of course return
 	 */
 	public long getCourseCount() {
@@ -112,10 +112,19 @@ public class ProviderServiceImpl extends ProviderRequester implements ProviderSe
 		return (Long) parser.getValue(results, "count");
 	}
 	
+	/**
+	 * Gets a number of pages of the courses offered by the provider
+	 * @return int number of pages
+	 */
 	public int getCoursePages() {
 		return Math.round(getCourseCount() / COURSE_PAGE);		
 	}
 	
+	/**
+	 * Gets the course description of the course
+	 * @param linkHash unique hash value of the course that represents OECD
+	 * @return String course description
+	 */
 	public String getCourseDescription(String linkHash){
 		String description = sendRequest("courses/view/" + linkHash + "/", true);
 		return (String) parser.getValue(description, "description");
