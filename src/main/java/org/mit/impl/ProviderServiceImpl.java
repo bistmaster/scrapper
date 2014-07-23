@@ -20,8 +20,14 @@ import org.mit.util.ProviderRequester;
  *
  */
 public class ProviderServiceImpl extends ProviderRequester implements ProviderService{
-	
+	/**
+	 *  Parser
+	 */
 	private final JSONParserUtil parser = new JSONParserUtil();
+	
+	/**
+	 * Courses being fetch per page
+	 */
 	private final static int COURSE_PAGE = 25;
 	
 	/**
@@ -91,9 +97,10 @@ public class ProviderServiceImpl extends ProviderRequester implements ProviderSe
 		Iterator i = parser.getCoursesOnJson(results);
 		while(i.hasNext()){
 			JSONObject json = (JSONObject) i.next();
+			String desc = getCourseDescription((String) json.get("linkhash"));
 			CourseList cl = new CourseList();
 			cl.setAuthor((String) json.get("author"));
-			cl.setDescription(getCourseDescription((String) json.get("linkhash")));
+			cl.setDescription(desc);
 			cl.setHash((String) json.get("linkhash"));
 			cl.setId((Long) json.get("id"));
 			cl.setLanguage((String) json.get("language"));
@@ -133,10 +140,10 @@ public class ProviderServiceImpl extends ProviderRequester implements ProviderSe
 	public static void main(String[] args) {
 		System.out.println("Fetching... ");
 		ProviderServiceImpl service = new ProviderServiceImpl(13);
-		service.getCourseList(0);
+		service.getCourseList(9);
 		service.getCourseDetail("59069fd6f629c3eefa5f8c5d6a39d96a");
-		System.out.println(service.getCourseDescription("59069fd6f629c3eefa5f8c5d6a39d96a"));
-		service.getCourseContent("http://ocw.mit.edu/courses/nuclear-engineering/22-033-nuclear-systems-design-project-fall-2011");
+		//System.out.println(service.getCourseDescription("59069fd6f629c3eefa5f8c5d6a39d96a"));
+		//service.getCourseContent("http://ocw.mit.edu/courses/nuclear-engineering/22-033-nuclear-systems-design-project-fall-2011");
 	}
 
 }
