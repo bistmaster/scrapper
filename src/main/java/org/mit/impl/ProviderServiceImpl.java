@@ -2,10 +2,13 @@ package org.mit.impl;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.mit.bean.CourseDetail;
 import org.mit.bean.CourseList;
 import org.mit.service.ProviderService;
@@ -19,6 +22,7 @@ import org.mit.util.ProviderRequester;
 public class ProviderServiceImpl extends ProviderRequester implements ProviderService{
 	
 	private final JSONParserUtil parser = new JSONParserUtil();
+	private final static int COURSE_PAGE = 25;
 	
 	/**
 	 * @param _provider Uniquie ID Identifier of the Provider from the OEC
@@ -71,18 +75,58 @@ public class ProviderServiceImpl extends ProviderRequester implements ProviderSe
 	 *  Get all the courses based on the provider id supplied in the constructor
 	 *  @return List
 	 */
-	public List<CourseList> getCourseList() {
-		String response = sendRequest("providers/" + this.getProvider() + "/courses/", true);
-		System.out.println(response);
+	@SuppressWarnings("rawtypes")
+	public List<CourseList> getCourseList(int page) {
+		if(page == 0){
+			page = 1;
+		} else {
+			int courseLength = getCoursePages();
+			if(page > courseLength) {
+				throw new RuntimeException("Invalid page exception, Unable to fetch page number.");
+			} 
+		} 
+		List<CourseList> listCourse = new ArrayList<CourseList>();
+		String response = sendRequest("providers/" + this.getProvider() + "/courses/?page=" + page, true);
 		JSONArray results = (JSONArray) parser.getValue(response, "results");
-		return parser.getCoursesOnJson(results);
+		Iterator i = parser.getCoursesOnJson(results);
+		while(i.hasNext()){
+			JSONObject json = (JSONObject) i.next();
+			CourseList cl = new CourseList();
+			cl.setAuthor((String) json.get("author"));
+			cl.setDescription(getCourseDescription((String) json.get("linkhash")));
+			cl.setHash((String) json.get("linkhash"));
+			cl.setId((Long) json.get("id"));
+			cl.setLanguage((String) json.get("language"));
+			cl.setTitle((String) json.get("title"));
+			listCourse.add(cl);			
+		}
+		return listCourse;
+	}
+	
+	/**
+	 * 
+	 * @return long a number of course return
+	 */
+	public long getCourseCount() {
+		String results = sendRequest("providers/" + this.getProvider() + "/courses/", true);
+		return (Long) parser.getValue(results, "count");
+	}
+	
+	public int getCoursePages() {
+		return Math.round(getCourseCount() / COURSE_PAGE);		
+	}
+	
+	public String getCourseDescription(String linkHash){
+		String description = sendRequest("courses/view/" + linkHash + "/", true);
+		return (String) parser.getValue(description, "description");
 	}
 	
 	public static void main(String[] args) {
 		System.out.println("Fetching... ");
 		ProviderServiceImpl service = new ProviderServiceImpl(13);
-		service.getCourseList();
+		service.getCourseList(0);
 		service.getCourseDetail("59069fd6f629c3eefa5f8c5d6a39d96a");
+		System.out.println(service.getCourseDescription("59069fd6f629c3eefa5f8c5d6a39d96a"));
 		service.getCourseContent("http://ocw.mit.edu/courses/nuclear-engineering/22-033-nuclear-systems-design-project-fall-2011");
 	}
 

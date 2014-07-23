@@ -1,14 +1,11 @@
 package org.mit.util;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.mit.bean.CourseList;
 /**
  * This is a utility class that parse the JSON object
  * @author Bethoveen
@@ -22,24 +19,11 @@ public class JSONParserUtil {
 	 * @return List<CourseList>
 	 */
 	@SuppressWarnings("rawtypes")
-	public List<CourseList> getCoursesOnJson(JSONArray arrays){
-		List<CourseList> listCourse = new ArrayList<CourseList>();
+	public Iterator getCoursesOnJson(JSONArray arrays){
 		if(arrays == null || arrays.size() == 0){
 			throw new RuntimeException("Provider not found, please supply a correct provider ID");
-		}
-		
-		Iterator i = arrays.iterator();
-		while (i.hasNext()) {
-			JSONObject json = (JSONObject) i.next();
-			CourseList cl = new CourseList();
-			cl.setAuthor((String) json.get("author"));
-			cl.setHash((String) json.get("linkhash"));
-			cl.setId((Long) json.get("id"));
-			cl.setLanguage((String) json.get("language"));
-			cl.setTitle((String) json.get("title"));
-			listCourse.add(cl);
-		}		
-		return listCourse;
+		}	
+		return arrays.iterator();
 	}	
 	
 	/**

@@ -10,7 +10,7 @@ import org.mit.bean.CourseList;
  *
  */
 public interface ProviderService {
-	public abstract List<CourseList> getCourseList();
+	public abstract List<CourseList> getCourseList(int page);
 	public abstract CourseDetail getCourseDetail(String linkHash);
 	public abstract void getCourseContent(String link); 
 }

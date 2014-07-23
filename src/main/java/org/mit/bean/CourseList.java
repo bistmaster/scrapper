@@ -11,7 +11,16 @@ public class CourseList {
 	private String language = "";
 	private long id = 0;
 	private String author = "";
+	private String description = "";
 	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	public CourseList() {}
 	
 	public String getTitle() {
