@@ -11,7 +11,10 @@ Open Education Consortium.
 
 ```java
 ProviderServiceImpl service = new ProviderServiceImpl(13);// 13 is a unique provider from OEC
-service.getCourseList(); // returns a List<CourseList>
+service.getCourseCount(); // return a number of courses of an institutions
+service.getCoursePages(); // return a number of pages
+service.getCourseDescription("linkHash") // returns a description of the course
+service.getCourseList(pageNumber); // returns a List<CourseList> with description
 service.getCourseDetails("hashlink") // returns CourseDetail bean
 servvice.getCourseContent("linkUrl") // WIP - gets the contents from the MIT or any university
 ```
@@ -31,7 +34,7 @@ provider.sendRequest("link_of_api"); // returns a JSON-text String
 ```java
 JSONParserUtil parser = new JSONParserUtil();
 parser.getValue("JSONTextFormattedValue", "AttributeKey"); // returns a value 
-parser.getCoursesOnJson(JSONArray); // return a json-parsed object of List<CourseList>
+parser.getCoursesOnJson(JSONArray); // return a Iterator Class
 ```
 
 <h5>Maven Dependency</h5>
