@@ -1,6 +1,9 @@
 package org.mit.util;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import com.jaunt.Element;
 import com.jaunt.Elements;
@@ -12,8 +15,9 @@ public class ScrapperUtil {
 	
 	private UserAgent userAgent = new UserAgent();
 	
-	public HashMap<String, String> getSectionAndUrl(String courseUrl){
+	public HashMap<String, String> getSectionAndContentByUrl(String courseUrl){
 		HashMap<String, String> hashMap = new HashMap<String, String>(); 
+		HashMap<String, String> content = null;
 		try {
 			Element firstElement = userAgent.visit(courseUrl).findFirst("<div id=\"course_nav\">");
 			Elements elements = firstElement.findEvery("<li class>");
@@ -24,6 +28,7 @@ public class ScrapperUtil {
 					hashMap.put(key, url);	
 				}
 			}
+			content = getContentBySection(hashMap);
 		} catch (ResponseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -31,11 +36,44 @@ public class ScrapperUtil {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return hashMap;
+		return content;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private HashMap<String, String> getContentBySection(HashMap<String, String> hashMap){
+		if(hashMap == null){
+			throw new RuntimeException("Invalid content and section");
+		}
+		HashMap<String, String> contents = new HashMap<String, String>();
+		Iterator<Entry<String, String>> i = hashMap.entrySet().iterator();
+		while(i.hasNext()){
+			Map.Entry pairs = (Map.Entry) i.next();
+			String topic = (String) pairs.getKey();
+			String description = getSectionContentByUrl((String) pairs.getValue());	
+			contents.put(topic, description);
+		}
+		return contents;
+	}
+	
+	
+	private String getSectionContentByUrl(String contentUrl){
+		String content = "";
+		try {
+			Element firstElement = userAgent.visit(contentUrl).findFirst("<div id=\"course_inner_section|course_inner_chp\">");
+			content = firstElement.innerHTML();
+			//System.out.println(contentUrl + ":" + content);
+		} catch (NodeNotFound e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ResponseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return content;
 	}
 	
 	public static void main(String...args){
 		ScrapperUtil mitService = new ScrapperUtil();
-		mitService.getSectionAndUrl("http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-00sc-introduction-to-computer-science-and-programming-spring-2011/unit-1/lecture-2-core-elements-of-a-program/");
+		HashMap<String, String> m = mitService.getSectionAndContentByUrl("http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-00sc-introduction-to-computer-science-and-programming-spring-2011/");
 	}
 }

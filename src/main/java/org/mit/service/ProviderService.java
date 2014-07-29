@@ -1,5 +1,6 @@
 package org.mit.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.mit.bean.CourseDetail;
@@ -12,5 +13,5 @@ import org.mit.bean.CourseList;
 public interface ProviderService {
 	public abstract List<CourseList> getCourseList(int page);
 	public abstract CourseDetail getCourseDetail(String linkHash);
-	public abstract void getCourseContent(String link); 
+	public abstract HashMap<String, String> getAllCourseContent(String link); 
 }

@@ -4,8 +4,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -14,6 +16,7 @@ import org.mit.bean.CourseList;
 import org.mit.service.ProviderService;
 import org.mit.util.JSONParserUtil;
 import org.mit.util.ProviderRequester;
+import org.mit.util.ScrapperUtil;
 /**
  * 
  * @author Bethoveen
@@ -67,14 +70,13 @@ public class ProviderServiceImpl extends ProviderRequester implements ProviderSe
 	}
 	
 	/**
-	 * Work-in-progress
-	 * Get the Course Details from the Institution
+	 * Scrap the content from MIT. It returns Topic and Description. Get the Course Details from the MIT
+	 * Topics are Course Home, Syllabus, Lecture notes, and etc. Descriptions are the content of the topics 
+	 * @return HashMap<String, String> Topic and Description. Example: 
 	 */
-	@SuppressWarnings("unused")
-	public void getCourseContent(String link) {
-		String[] sections = { "Syllabus", "calendar", "readings", "assignments", "download-course-materials", "videos-class-notes", };
-		String html = sendRequest(link, false);
-		System.out.println(html);
+	public HashMap<String, String> getAllCourseContent(String link) {
+		ScrapperUtil scrapper = new ScrapperUtil();
+		return scrapper.getSectionAndContentByUrl(link);
 	}
 	
 	/**
@@ -142,8 +144,13 @@ public class ProviderServiceImpl extends ProviderRequester implements ProviderSe
 		ProviderServiceImpl service = new ProviderServiceImpl(13);
 		service.getCourseList(9);
 		service.getCourseDetail("59069fd6f629c3eefa5f8c5d6a39d96a");
-		//System.out.println(service.getCourseDescription("59069fd6f629c3eefa5f8c5d6a39d96a"));
-		//service.getCourseContent("http://ocw.mit.edu/courses/nuclear-engineering/22-033-nuclear-systems-design-project-fall-2011");
+		String url = "http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-00sc-introduction-to-computer-science-and-programming-spring-2011/";
+		Iterator it = service.getAllCourseContent(url).entrySet().iterator();
+		while(it.hasNext()){
+			Map.Entry pairs = (Map.Entry) it.next();
+			String topic = (String) pairs.getKey();
+			String description = (String) pairs.getValue();			
+		}
 	}
 
 }
