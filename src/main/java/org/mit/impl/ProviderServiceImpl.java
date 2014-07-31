@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -75,8 +76,8 @@ public class ProviderServiceImpl extends ProviderRequester implements ProviderSe
 	 * @return HashMap<String, String> Topic and Description. Example: 
 	 */
 	public HashMap<String, String> getAllCourseContent(String link) {
-		ScrapperUtil scrapper = new ScrapperUtil();
-		return scrapper.getSectionAndContentByUrl(link);
+		//ScrapperUtil scrapper = new ScrapperUtil();
+		return null;
 	}
 	
 	/**
@@ -145,11 +146,12 @@ public class ProviderServiceImpl extends ProviderRequester implements ProviderSe
 		service.getCourseList(9);
 		service.getCourseDetail("59069fd6f629c3eefa5f8c5d6a39d96a");
 		String url = "http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-00sc-introduction-to-computer-science-and-programming-spring-2011/";
-		Iterator it = service.getAllCourseContent(url).entrySet().iterator();
+		Iterator<Entry<String, String>> it = service.getAllCourseContent(url).entrySet().iterator();
 		while(it.hasNext()){
-			Map.Entry pairs = (Map.Entry) it.next();
+			Entry<String, String> pairs = it.next();
 			String topic = (String) pairs.getKey();
-			String description = (String) pairs.getValue();			
+			String description = (String) pairs.getValue();	
+			System.out.println("Topic : " + topic + " Description: " + description);
 		}
 	}
 

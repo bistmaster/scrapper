@@ -1,10 +1,12 @@
 package org.mit.util;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
+import org.mit.bean.CourseContent;
 import com.jaunt.Element;
 import com.jaunt.Elements;
 import com.jaunt.NodeNotFound;
@@ -13,22 +15,35 @@ import com.jaunt.UserAgent;
 
 public class ScrapperUtil {
 	
+	private static final String EXCLUDE_DOWNLOAD = "Download Course Materials";
+	private static final String COURSE_CONTAINER = "<div id=\"course_nav\">";
+	private static final String UNITS_CONTAINER = "<div class=\"mO|mC\">";
+	
 	private UserAgent userAgent = new UserAgent();
 	
-	public HashMap<String, String> getSectionAndContentByUrl(String courseUrl){
-		HashMap<String, String> hashMap = new HashMap<String, String>(); 
-		HashMap<String, String> content = null;
+	public List<CourseContent> getSectionAndContentByUrl(String courseUrl){
+		ArrayList<CourseContent> contents = new ArrayList<CourseContent>();
 		try {
-			Element firstElement = userAgent.visit(courseUrl).findFirst("<div id=\"course_nav\">");
-			Elements elements = firstElement.findEvery("<li class>");
+			Element firstElement = userAgent.visit(courseUrl).findFirst(COURSE_CONTAINER).getElement(1);
+			List<Element> elements = firstElement.getChildElements();
 			for(Element elem : elements){
 				String key = elem.innerText().trim();
-				String url = elem.findFirst("<a href>").getAt("href").trim();
-				if(key.indexOf("Download Course Materials") == -1 && url.indexOf("#") == -1){
-					hashMap.put(key, url);	
-				}
+				if(key.indexOf(EXCLUDE_DOWNLOAD) == -1){
+					CourseContent course = new CourseContent();
+					if(elem.getElement(0).size() == 1){
+						key = elem.innerText().trim();
+						elem.getElement(0).getAt("href").trim();
+						course.setSection(key);	
+						course.setTopic("");
+					} else {
+						if(hasUnits(elem)){
+							key = getUnitText(elem);
+							course.setSection(key);								
+						}
+					}
+					contents.add(course);
+				}				
 			}
-			content = getContentBySection(hashMap);
 		} catch (ResponseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -36,7 +51,12 @@ public class ScrapperUtil {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return content;
+		return contents;
+	}
+	
+	public List<CourseContent> getSectionAndContent(Element element){
+
+		return null;
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -54,6 +74,29 @@ public class ScrapperUtil {
 		}
 		return contents;
 	}
+	
+	private boolean hasUnits(Element element){
+		Elements elems = element.findEvery(UNITS_CONTAINER);
+		return (elems.size() > 0) ? true : false;
+	}
+	
+	private String getUnitText(Element element) throws NodeNotFound {
+		String unitName = ""; 
+		Elements elems = element.findEvery(UNITS_CONTAINER);
+		for(Element unit: elems){
+			unitName = unit.getElement(1).getText().trim();
+		}
+		return unitName;
+	}
+
+	private String getSubUnitText(Element element) throws NodeNotFound {
+		String unitName = ""; 
+		Elements elems = element.findEvery(UNITS_CONTAINER);
+		for(Element unit: elems){
+			unitName = unit.getElement(1).getText().trim();
+		}
+		return unitName;
+	}	
 	
 	
 	private String getSectionContentByUrl(String contentUrl){
@@ -74,6 +117,9 @@ public class ScrapperUtil {
 	
 	public static void main(String...args){
 		ScrapperUtil mitService = new ScrapperUtil();
-		HashMap<String, String> m = mitService.getSectionAndContentByUrl("http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-00sc-introduction-to-computer-science-and-programming-spring-2011/");
+		List<CourseContent> m = mitService.getSectionAndContentByUrl("http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-00sc-introduction-to-computer-science-and-programming-spring-2011/");
+		for(CourseContent course: m){
+			System.out.println(course.getSection());
+		}
 	}
 }
